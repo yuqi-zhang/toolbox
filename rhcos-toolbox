@@ -6,7 +6,6 @@ trap cleanup EXIT
 setup() {
     REGISTRY=registry.fedoraproject.org
     IMAGE=fedora:latest
-    TOOLBOX_IMAGE="${REGISTRY}"/"${IMAGE}"
     TOOLBOX_NAME=toolbox-"${USER}"
 
     # Allow user overrides
@@ -16,6 +15,7 @@ setup() {
         echo ".toolboxrc file detected, overriding defaults..."
         source "${toolboxrc}"
     fi
+    TOOLBOX_IMAGE="${REGISTRY}"/"${IMAGE}"
 }
 
 run() {
