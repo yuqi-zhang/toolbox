@@ -60,12 +60,16 @@ image_exists() {
 }
 
 image_pull() {
-    echo "Image '$TOOLBOX_IMAGE' not detected on system."
-    read -r -n 1 -p "Would you like to login before pulling from registry: '${REGISTRY}'? [y/N] "
-    echo
+    if ! sudo podman pull "$TOOLBOX_IMAGE"; then
+        read -r -n 1 -p "Would you like to authenticate to registry: '${REGISTRY}' and try again? [y/N] "
+        echo
 
-    if [[ $REPLY =~ ^[Yy]$ ]]; then
-        sudo podman login "${REGISTRY}"
+        if [[ $REPLY =~ ^[Yy]$ ]]; then
+            sudo podman login "${REGISTRY}"
+            sudo podman pull "$TOOLBOX_IMAGE"
+        else
+            exit 1
+        fi
     fi
 }
 
